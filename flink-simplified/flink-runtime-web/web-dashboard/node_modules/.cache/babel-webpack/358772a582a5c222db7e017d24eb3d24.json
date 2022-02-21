@@ -1,0 +1,1 @@
+{"ast":null,"code":"/* global window */\nvar graphlib;\n\nif (typeof require === \"function\") {\n  try {\n    graphlib = require(\"graphlib\");\n  } catch (e) {// continue regardless of error\n  }\n}\n\nif (!graphlib) {\n  graphlib = window.graphlib;\n}\n\nmodule.exports = graphlib;","map":null,"metadata":{},"sourceType":"script"}
