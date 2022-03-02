@@ -69,7 +69,6 @@ public class RocksDBCount {
     final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
     env.setStateBackend(new EmbeddedRocksDBStateBackend());
-    env.getCheckpointConfig().setCheckpointStorage("file:////home/fredrik/Documents/MasterThesis/flink-simplified/flink-examples/flink-examples-streaming/src/main/java/org/apache/flink/streaming/examples/rocksdbcount/out/fink-checkpoints");
 
     DataStream<String> text = env.readTextFile("/home/fredrik/Documents/ScalableML/lab2/snil_data/SNLI_Corpus/snli_1.0_train.csv");
 
