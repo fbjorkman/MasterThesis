@@ -19,6 +19,12 @@
 package org.apache.flink.streaming.examples.rocksdbcount;
 
 import org.apache.flink.api.common.functions.FlatMapFunction;
+import org.apache.flink.api.common.functions.RichFlatMapFunction;
+import org.apache.flink.api.common.state.ValueState;
+import org.apache.flink.api.common.state.ValueStateDescriptor;
+import org.apache.flink.api.common.typeinfo.TypeHint;
+import org.apache.flink.api.common.typeinfo.TypeInformation;
+import org.apache.flink.configuration.Configuration;
 import org.apache.flink.contrib.streaming.state.EmbeddedRocksDBStateBackend;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -31,23 +37,39 @@ public class RocksDBWordSum {
     public static final class Tokenizer implements FlatMapFunction<String, Integer>{
 
         @Override
-        public void flatMap(String value, Collector<Integer> out) throws Exception {
+        public void flatMap(String value, Collector<Integer> out) {
             String[] tokens = value.toLowerCase().split("\\W+");
-//            if(tokens.length < 10){
-//                for (String token : tokens) {
-//                    System.out.print(token + ", ");
-//                }
-//                System.out.println();
-//            }
             out.collect(tokens.length);
+        }
+    }
+
+    public static class RocksSum extends RichFlatMapFunction<Integer, Integer> {
+
+        ValueState<Integer> stateSum;
+
+        @Override
+        public void flatMap(Integer value, Collector<Integer> out) throws Exception {
+            if (stateSum.value() == null){
+                stateSum.update(value);
+            } else{
+                stateSum.update(stateSum.value() + value);
+            }
+            System.out.println(stateSum.value());
+        }
+
+        @Override
+        public void open(Configuration config) {
+            ValueStateDescriptor<Integer> descriptor =
+                    new ValueStateDescriptor<>("sum",
+                            TypeInformation.of(new TypeHint<>() {
+                            }));
+            stateSum = getRuntimeContext().getState(descriptor);
         }
     }
 
   public static void main(String[] args) throws Exception {
 
       final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-
-      env.setParallelism(1);
 
       env.setStateBackend(new EmbeddedRocksDBStateBackend());
 
@@ -57,10 +79,10 @@ public class RocksDBWordSum {
               .flatMap(new Tokenizer())
               .keyBy(k -> k)
               .window(TumblingProcessingTimeWindows.of(Time.milliseconds(500)))
-              .sum(0);
+              .sum(0)
+              .keyBy(k -> 0)
+              .flatMap(new RocksSum());
 
-
-      count.print();
       env.execute("RocksDBWordSum");
   }
 }
