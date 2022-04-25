@@ -18,6 +18,7 @@
 
 package org.apache.flink.streaming.examples.rocksdbcount;
 
+import org.apache.flink.api.common.JobExecutionResult;
 import org.apache.flink.api.common.functions.RichFlatMapFunction;
 import org.apache.flink.api.common.state.ValueState;
 import org.apache.flink.api.common.state.ValueStateDescriptor;
@@ -28,60 +29,93 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.contrib.streaming.state.EmbeddedRocksDBStateBackend;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.streaming.api.functions.ProcessFunction;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingProcessingTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.examples.wordcount.WordCount;
 import org.apache.flink.util.Collector;
 
-import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 public class RocksDBCount {
 
-  public static class RocksSum extends RichFlatMapFunction<Tuple2<String, Integer>, Tuple2<String, Integer>> {
+    public static class RocksSum extends RichFlatMapFunction<Tuple2<String, Integer>, Tuple2<String, Integer>> {
 
-    ValueState<Tuple2<String, Integer>> stateSum;
+        ValueState<Tuple2<String, Integer>> stateSum;
 
+        @Override
+        public void flatMap(Tuple2<String, Integer> value, Collector<Tuple2<String, Integer>> out) throws Exception {
+            Tuple2<String, Integer> current = stateSum.value();
+            Tuple2<String, Integer> updatedValue = new Tuple2<>(value.f0, value.f1);
+            if (current == null){
+                stateSum.update(updatedValue);
+            } else{
+                updatedValue.f1 += current.f1;
+                stateSum.update(updatedValue);
+            }
+//      System.out.println(stateSum.value());
+      out.collect(updatedValue);
+        }
 
-    @Override
-    public void flatMap(Tuple2<String, Integer> value, Collector<Tuple2<String, Integer>> out) throws Exception {
-      Tuple2<String, Integer> current = stateSum.value();
-      if (current == null){
-        stateSum.update(new Tuple2<>(value.f0, value.f1));
-      } else{
-        current.f1 += value.f1;
-        stateSum.update(current);
-      }
+        @Override
+        public void open(Configuration config) {
+            ValueStateDescriptor<Tuple2<String, Integer>> descriptor =
+                    new ValueStateDescriptor<>("sum",
+                            TypeInformation.of(new TypeHint<>() {}));
+            stateSum = getRuntimeContext().getState(descriptor);
+        }
 
-      System.out.println(stateSum.value());
+//    @Override
+//    public void processElement(Tuple2<String, Integer> value, ProcessFunction<Tuple2<String, Integer>,
+//            Tuple2<String, Integer>>.Context ctx, Collector<Tuple2<String, Integer>> out) throws Exception {
+//
+//      Tuple2<String, Integer> current = stateSum.value();
+//      Tuple2<String, Integer> updatedValue = new Tuple2<>(value.f0, value.f1);
+//
+//      if (current == null){
+//        stateSum.update(updatedValue);
+//      } else{
+//        updatedValue.f1 += current.f1;
+//        stateSum.update(updatedValue);
+//      }
+////      System.out.println(stateSum.value());
+////      out.collect(updatedValue);
+//    }
     }
 
-    @Override
-    public void open(Configuration config) throws IOException {
-      ValueStateDescriptor<Tuple2<String, Integer>> descriptor =
-          new ValueStateDescriptor<>("sum",
-                  TypeInformation.of(new TypeHint<>() {}));
-      stateSum = getRuntimeContext().getState(descriptor);
+//    public static class myProcessFunction extends ProcessFunction<Tuple2<String, Integer>, Tuple2<String, Integer>>{
+//        static long first = 0;
+//        static long last;
+//        @Override
+//        public void processElement(Tuple2<String, Integer> value, ProcessFunction<Tuple2<String, Integer>,
+//                Tuple2<String, Integer>>.Context ctx, Collector<Tuple2<String, Integer>> out) throws Exception {
+//            if (first == 0){
+//                first = ctx.timestamp();
+//            }
+//            last = ctx.timestamp();
+//        }
+//    }
+
+    public static void main(String[] args) throws Exception {
+
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+
+        env.setStateBackend(new EmbeddedRocksDBStateBackend());
+
+        DataStream<String> text = env.readTextFile("/home/fredrik/Documents/ScalableML/lab2/snil_data/SNLI_Corpus/snli_1.0_train.csv");
+
+        DataStream<Tuple2<String, Integer>> counts =
+                text.flatMap(new WordCount.Tokenizer())
+//                    .filter(t -> t.f0.equals("and") | t.f0.equals("or"))
+                        .keyBy(t -> t.f0)
+                        .window(TumblingProcessingTimeWindows.of(Time.milliseconds(500)))
+                        .sum(1)
+                        .keyBy(t -> t.f0)
+                        .flatMap(new RocksSum());
+//                        .process(new myProcessFunction());
+
+//    counts.print();
+        JobExecutionResult result = env.execute("RocksDBCount");
+        System.out.println("The job took " + result.getNetRuntime(TimeUnit.SECONDS) + " seconds to execute");
     }
-  }
-
-  public static void main(String[] args) throws Exception {
-
-    final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-
-    env.setStateBackend(new EmbeddedRocksDBStateBackend());
-
-    DataStream<String> text = env.readTextFile("/home/fredrik/Documents/ScalableML/lab2/snil_data/SNLI_Corpus/snli_1.0_train.csv");
-
-    DataStream<Tuple2<String, Integer>> counts =
-            text.flatMap(new WordCount.Tokenizer())
-                    .filter(t -> t.f0.equals("and") | t.f0.equals("or"))
-                    .keyBy(t -> t.f0)
-                    .window(TumblingProcessingTimeWindows.of(Time.milliseconds(500)))
-                    .sum(1)
-                    .keyBy(t -> t.f0)
-                    .flatMap(new RocksSum());
-
-    env.execute("RocksDBCount");
-
-  }
 }

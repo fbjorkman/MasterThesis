@@ -54,7 +54,6 @@ public class RocksDBWordSum {
             } else{
                 stateSum.update(stateSum.value() + value);
             }
-            System.out.println(stateSum.value());
         }
 
         @Override
