@@ -21,6 +21,7 @@ package org.apache.flink.api.common.state;
 import org.apache.flink.annotation.PublicEvolving;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -49,6 +50,8 @@ public interface MapState<UK, UV> extends State {
      * @throws Exception Thrown if the system cannot access the state.
      */
     UV get(UK key) throws Exception;
+
+    List<UV> multiGet(List<UK> userKeys) throws Exception;
 
     /**
      * Associates a new value with the given key.

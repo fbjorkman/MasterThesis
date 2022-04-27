@@ -27,6 +27,7 @@ import org.apache.flink.runtime.state.internal.InternalMapState;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /** A {@link MapState} which keeps value for a single key at a time. */
@@ -48,6 +49,11 @@ class BatchExecutionKeyMapState<K, N, UK, UV>
             return null;
         }
         return getCurrentNamespaceValue().get(key);
+    }
+
+    @Override
+    public List<UV> multiGet(List<UK> userKeys) throws Exception {
+        return null;
     }
 
     @Override

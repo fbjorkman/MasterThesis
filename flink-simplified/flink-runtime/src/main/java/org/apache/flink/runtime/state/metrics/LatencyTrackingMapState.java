@@ -23,6 +23,7 @@ import org.apache.flink.metrics.MetricGroup;
 import org.apache.flink.runtime.state.internal.InternalMapState;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -63,6 +64,9 @@ class LatencyTrackingMapState<K, N, UK, UV>
             return original.get(key);
         }
     }
+
+    @Override
+    public List<UV> multiGet(List<UK> userKeys){return null;}
 
     @Override
     public void put(UK key, UV value) throws Exception {

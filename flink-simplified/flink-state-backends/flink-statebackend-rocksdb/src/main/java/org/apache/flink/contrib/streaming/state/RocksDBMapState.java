@@ -50,6 +50,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import static org.apache.flink.util.Preconditions.checkArgument;
@@ -126,6 +127,31 @@ class RocksDBMapState<K, N, UK, UV> extends AbstractRocksDBState<K, N, Map<UK, U
         return (rawValueBytes == null
                 ? null
                 : deserializeUserValue(dataInputView, rawValueBytes, userValueSerializer));
+    }
+
+
+    public List<UV> multiGet(List<UK> userKeys) throws IOException, RocksDBException {
+        List<byte[]> rawKeyBytesList = new ArrayList<>();
+        List<UV> deserializeUserValueList = new ArrayList<>();
+        List<ColumnFamilyHandle> columnFamilyHandleList = new ArrayList<>();
+
+        for(UK key : userKeys){
+            rawKeyBytesList.add(serializeCurrentKeyWithGroupAndNamespacePlusUserKey(key, userKeySerializer));
+            columnFamilyHandleList.add(columnFamily);
+        }
+
+        List<byte[]> rawValueBytesList = backend.db.multiGetAsList(
+                columnFamilyHandleList,
+                rawKeyBytesList);
+
+        for(byte[] rawValue : rawValueBytesList){
+            if(rawValue == null)
+                deserializeUserValueList.add(null);
+            else
+                deserializeUserValueList.add(deserializeUserValue(dataInputView, rawValue, userValueSerializer));
+        }
+
+        return deserializeUserValueList;
     }
 
     @Override

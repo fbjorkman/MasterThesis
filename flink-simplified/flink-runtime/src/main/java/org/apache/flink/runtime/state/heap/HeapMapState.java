@@ -31,6 +31,7 @@ import org.apache.flink.util.Preconditions;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -90,6 +91,11 @@ class HeapMapState<K, N, UK, UV> extends AbstractHeapState<K, N, Map<UK, UV>>
         }
 
         return userMap.get(userKey);
+    }
+
+    @Override
+    public List<UV> multiGet(List<UK> userKeys) throws Exception {
+        return null;
     }
 
     @Override

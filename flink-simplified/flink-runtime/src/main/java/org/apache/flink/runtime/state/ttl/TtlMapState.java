@@ -30,6 +30,7 @@ import java.util.AbstractMap;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.function.Function;
@@ -56,6 +57,11 @@ class TtlMapState<K, N, UK, UV>
     public UV get(UK key) throws Exception {
         TtlValue<UV> ttlValue = getWrapped(key);
         return ttlValue == null ? null : ttlValue.getUserValue();
+    }
+
+    @Override
+    public List<UV> multiGet(List<UK> userKeys) throws Exception {
+        return null;
     }
 
     private TtlValue<UV> getWrapped(UK key) throws Exception {

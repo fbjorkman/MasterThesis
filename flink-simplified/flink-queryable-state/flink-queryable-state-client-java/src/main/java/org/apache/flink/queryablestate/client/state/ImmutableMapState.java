@@ -29,8 +29,10 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * A read-only {@link MapState} that does not allow for modifications.
@@ -51,6 +53,9 @@ public final class ImmutableMapState<K, V> extends ImmutableState implements Map
     public V get(K key) {
         return state.get(key);
     }
+
+    @Override
+    public List<V> multiGet(List<K> userKeys){return userKeys.stream().map(state::get).collect(Collectors.toList());}
 
     @Override
     public void put(K key, V value) {

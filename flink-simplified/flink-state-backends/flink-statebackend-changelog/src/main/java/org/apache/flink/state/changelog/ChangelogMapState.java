@@ -34,6 +34,7 @@ import org.apache.flink.util.function.ThrowingConsumer;
 
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -89,6 +90,11 @@ class ChangelogMapState<K, N, UK, UV>
     @Override
     public UV get(UK key) throws Exception {
         return delegatedState.get(key);
+    }
+
+    @Override
+    public List<UV> multiGet(List<UK> userKeys) throws Exception {
+        return null;
     }
 
     @Override

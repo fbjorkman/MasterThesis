@@ -22,6 +22,7 @@ import org.apache.flink.api.common.state.MapState;
 
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -45,6 +46,10 @@ class UserFacingMapState<K, V> implements MapState<K, V> {
     @Override
     public V get(K key) throws Exception {
         return originalState.get(key);
+    }
+
+    public List<V> multiGet(List<K> userKeys) throws Exception {
+        return originalState.multiGet(userKeys);
     }
 
     @Override
