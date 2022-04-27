@@ -55,7 +55,9 @@ public final class ImmutableMapState<K, V> extends ImmutableState implements Map
     }
 
     @Override
-    public List<V> multiGet(List<K> userKeys){return userKeys.stream().map(state::get).collect(Collectors.toList());}
+    public List<V> multiGet(List<K> userKeys){
+        return null;
+    }
 
     @Override
     public void put(K key, V value) {
