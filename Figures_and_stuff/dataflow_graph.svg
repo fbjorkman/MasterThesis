@@ -2,12 +2,12 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   width="153.32724mm"
-   height="30.109146mm"
-   viewBox="0 0 153.32724 30.109146"
+   width="113.97827mm"
+   height="30.072918mm"
+   viewBox="0 0 113.97827 30.072918"
    version="1.1"
    id="svg5"
-   inkscape:version="1.1.2 (76b9e6a115, 2022-02-25)"
+   inkscape:version="1.1.2 (08b2f3d93c, 2022-04-05)"
    sodipodi:docname="dataflow_graph.svg"
    inkscape:export-filename="/home/fredrik/Documents/MasterThesis/Figures_and_stuff/dataflow_graph.png"
    inkscape:export-xdpi="96"
@@ -27,10 +27,10 @@
      inkscape:document-units="mm"
      showgrid="false"
      inkscape:zoom="1.0074671"
-     inkscape:cx="183.13253"
+     inkscape:cx="167.25112"
      inkscape:cy="127.54759"
-     inkscape:window-width="1920"
-     inkscape:window-height="1163"
+     inkscape:window-width="1366"
+     inkscape:window-height="699"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
@@ -84,16 +84,10 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(-26.584398,-18.486373)">
+     transform="translate(-65.915254,-18.504487)">
     <g
        id="g70398"
        transform="translate(-3.2141863,3.5828992)">
-      <circle
-         style="fill:#ffff00;fill-rule:evenodd;stroke:#000000;stroke-width:0.264583;stroke-opacity:1"
-         id="path105"
-         cx="46.061329"
-         cy="30.186314"
-         r="10.054023" />
       <circle
          style="fill:#ffff00;fill-rule:evenodd;stroke:#000000;stroke-width:0.264583;stroke-opacity:1"
          id="path105-3"
@@ -110,18 +104,23 @@
          xml:space="preserve"
          style="font-style:normal;font-weight:normal;font-size:4.23333px;line-height:1.25;font-family:sans-serif;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264579"
          x="125.86494"
-         y="29.709887"
+         y="27.064089"
          id="text4190-5-5"
          transform="scale(0.9999867,1.0000133)"><tspan
            sodipodi:role="line"
            id="tspan4188-3-6"
            style="font-size:4.23333px;text-align:center;text-anchor:middle;stroke-width:0.264579"
            x="125.86494"
-           y="29.709887">Window/</tspan><tspan
+           y="27.064089">KeyBy/</tspan><tspan
            sodipodi:role="line"
            style="font-size:4.23333px;text-align:center;text-anchor:middle;stroke-width:0.264579"
            x="125.86494"
-           y="35.001549"
+           y="32.355751"
+           id="tspan18563">Window/</tspan><tspan
+           sodipodi:role="line"
+           style="font-size:4.23333px;text-align:center;text-anchor:middle;stroke-width:0.264579"
+           x="125.86494"
+           y="37.647415"
            id="tspan2996">Sum</tspan></text>
       <circle
          style="fill:#ffff00;fill-rule:evenodd;stroke:#000000;stroke-width:0.264583;stroke-opacity:1"
@@ -142,14 +141,6 @@
            x="160.77461"
            y="31.851973">Sink</tspan></text>
       <path
-         style="display:inline;fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Lend)"
-         d="M 56.115352,30.186314 H 76.00731"
-         id="path1261"
-         inkscape:connector-type="polyline"
-         inkscape:connector-curvature="0"
-         inkscape:connection-start="#path105"
-         inkscape:connection-end="#path105-3" />
-      <path
          style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Lend)"
          d="M 96.115355,30.186314 H 116.00728"
          id="path1263"
@@ -168,32 +159,21 @@
       <text
          xml:space="preserve"
          style="font-style:normal;font-weight:normal;font-size:4.93889px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
-         x="37.536404"
-         y="31.765583"
-         id="text4190"><tspan
-           sodipodi:role="line"
-           id="tspan4188"
-           style="font-size:4.93889px;stroke-width:0.264583"
-           x="37.536404"
-           y="31.765583">Source</tspan></text>
-      <text
-         xml:space="preserve"
-         style="font-style:normal;font-weight:normal;font-size:4.93889px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
-         x="78.310158"
+         x="77.780991"
          y="31.70047"
          id="text4190-5"><tspan
            sodipodi:role="line"
            id="tspan4188-3"
            style="font-size:4.93889px;stroke-width:0.264583"
-           x="78.310158"
-           y="31.70047">KeyBy</tspan></text>
+           x="77.780991"
+           y="31.70047">Source</tspan></text>
     </g>
     <rect
-       style="fill:#0000ff;fill-opacity:0;fill-rule:evenodd;stroke:#000000;stroke-width:0.262651;stroke-opacity:1"
+       style="fill:#0000ff;fill-opacity:0;fill-rule:evenodd;stroke:#000000;stroke-width:0.226423;stroke-opacity:1"
        id="rect82"
-       width="153.06459"
+       width="113.75185"
        height="29.846495"
-       x="26.715723"
+       x="66.028465"
        y="18.617699" />
   </g>
 </svg>
