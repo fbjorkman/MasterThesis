@@ -1,0 +1,23 @@
+5 keys 1000 runs
+Avg get: 91.208736 | per key ~ 18,242
+Avg mul: 87.178692 | per key ~ 17,436
+
+10 keys 1000 runs
+Avg get: 181.731778 | per key ~ 18,173
+Avg mul: 158.319565 | per key ~ 15,832
+
+50 keys 100 runs
+Avg get: 934.053764 | per key ~ 18,681
+Avg mul: 615.465638 | per key ~ 12,309
+
+100 keys 100 runs
+Avg get: 1801.970671 | per key ~ 18,020
+Avg mul: 1136.478951 | per key ~ 11,365
+
+500 keys 10 runs 
+Avg get: 9079.296684 | per key ~ 18,1586
+Avg mul: 4851.499396 | per key ~ 9,703
+
+1000 keys 10 runs
+Avg get: 21083.524279 | per key ~ 21,084
+Avg mul: 10923.408261 | per key ~ 10,923
